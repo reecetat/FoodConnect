@@ -97,3 +97,177 @@ let vue = function() {
     }
 
     vue();
+
+
+const $resultsContainer = document.getElementById("results")
+const $usersContainer = document.getElementById("users")
+document.getElementById("login")
+    .onsubmit = login
+document.getElementById("createresult")
+    .onsubmit = createresult
+
+spawnResult()
+
+spawnUsers()
+let user_id
+
+function createresult(e) {
+    e.preventDefault()
+    const payload = {
+        body: JSON.stringify({
+            text: document.getElementById("newresult").value
+        }),
+        method: "result",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }
+    fetch("/results", payload)
+        .then(res => res.json())
+        .then(res => console.log(res.body))
+        .catch(error => console.error(error))
+}
+
+function login(e) {
+    e.preventDefault()
+    const payload = {
+        body: JSON.stringify({
+            username: document.getElementById("username").value,
+            password: document.getElementById("password").value
+        }),
+        method: "result",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }
+    fetch("/login", payload)
+        .then(res => res.json())
+        .then(res => {
+            user_id = res.userId
+        })
+        .catch(error => console.error(error))
+}
+
+function spawnResult() {
+   fetch("/result")
+    .then(res => res.json())
+    .then(result => {
+        const resultHTML = result.map( result => `
+        <div class="result">
+            <p>${result.content}</p>
+            <div class="details">
+                <div>${result.userid}</div>
+            </div>
+        </div>
+        ` ).join("")
+        $resultsContainer.innerHTML = resultsHTML
+    })
+    .catch(err => console.error(err))
+   
+}
+
+function spawnUsers() {
+    fetch("/users")
+     .then(res => res.json())
+     .then(users => {
+         const usersHTML = users.map( user => `
+         <div class="user" data-userid=${user.id}>
+             <p>${user.username}</p>
+             <div class="details">
+                 <div>${user.firstName}</div>
+             </div>
+             <button onclick="e => {addFriend(e);}">Add Friend</button>
+         </div>
+         ` ).join("")
+         $usersContainer.innerHTML = usersHTML
+     })
+     .catch(err => console.error(err))
+    
+ }
+
+function addFriend(e) {
+    const $userDiv = e.target.parentElement
+    const friend_id = $userDiv.userid
+
+    const payload = {
+        body: JSON.stringify({
+            user_id: user_id,
+            friend_id: friend_id
+        }),
+        method: "result",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }
+    fetch("/friends", payload)
+        .then(res => res.json())
+        .then(res => console.log(res.body))
+        .catch(error => console.error(error))
+}
+
+function loadData() {
+    return {
+        results: [
+            {
+              //These are examples from you that I didn't bother to change due to lack of time
+                text: "I got a new dog last night! It's so cute!",
+                user: "kimmy23",
+                datetime: new Date(),
+                numLikes: 3,
+                comments: []
+            },
+            {
+                text: "I got a new dog last night! It's so cute!",
+                user: "kimmy23",
+                datetime: new Date(),
+                numLikes: 3,
+                comments: []
+            },
+            {
+                text: "I got a new dog last night! It's so cute!",
+                user: "kimmy23",
+                datetime: new Date(),
+                numLikes: 3,
+                comments: []
+            },
+            {
+                text: "I got a new dog last night! It's so cute!",
+                user: "kimmy23",
+                datetime: new Date(),
+                numLikes: 3,
+                comments: []
+            }
+        ],
+        users: [
+            {
+                username: "kimmy23",
+                firstName: "Kimberly",
+                lastName: "Bash",
+                gender: "F",
+                age: 45
+            },
+            {
+                username: "wordup",
+                firstName: "John",
+                lastName: "Word",
+                gender: "M",
+                age: 31
+            },
+            {
+                username: "dogguy23",
+                firstName: "Rob",
+                lastName: "Obeneur",
+                gender: "M",
+                age: 62
+            },
+            {
+                username: "silentninja84",
+                firstName: "Lesa",
+                lastName: "Kirkland",
+                gender: "F",
+                age: 17
+            }
+        ]
+    }
+}
+

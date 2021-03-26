@@ -155,23 +155,3 @@ h2 {
 .swipe-fade-leave-active {
   transition:  transform .5s ease, opacity .25s ease;
 }
-
-.blue {
-  color: blue;
-}
-
-.pink {
-  color: pink;
-}
-
-.yellow {
-  color: yellow;
-}
-
-.green {
-  color: green;
-}
-
-[v-cloak] {
-  display: none;
-}

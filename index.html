@@ -1,3 +1,6 @@
+<!DOCTYPE html>
+<script src="vue.js"></script>
+<link rel="stylesheet" href="style.css">
 <div id="app" v-cloak>
 
   <div class="quiz">
@@ -35,16 +38,16 @@
       <transition name="swipe-fade">
         <div v-show="questionIndex === quiz.questions.length">
           <h2>
-        You need to go to {{ result() }} 
+        "You need to go to {{ result() }}" 
           </h2>
           <p>
-            your restaraunt is {{ result() }}. 
+            "your restaraunt is {{ result() }}." 
           </p>
           <button v-on:click="restart">
             Retake
           </button>
         </div>
-      </transition>
-    </div>
+        <script src="client.js"></script>
 
-</div>
+
+        
