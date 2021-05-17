@@ -1,12 +1,13 @@
 const express = require('express')
 const sqlite3 = require('sqlite3')
 const app = new express()
-const db = new sqlite3.Database('./db/foodquiz.db')
+const db = new sqlite3.Database('foodquiz.db')
 const users = loadData().users
 
 app.use(express.static('public'))
+app.use(express.urlencoded())
 app.use(express.json())
-
+  
 app.get("/result", (req,res) => {
     const sql = "SELECT * FROM result"
     db.all(sql,[],(err, rows) => {
@@ -33,7 +34,7 @@ app.post("/result", (req,res)=> {
 
 app.post("/login", (req, res) => {
     const user = req.body
-    
+    console.log(req.body)
     const sql2 = "SELECT id, first_name, last_name FROM users WHERE username = ? AND password = ?"
     db.all(sql2,[user.username, user.password],(err, rows) => {
         if (rows && rows.length > 0) {
@@ -42,7 +43,7 @@ app.post("/login", (req, res) => {
                 user: rows[0]
             })
         }
-        
+       
     else {
         if (user.username.length >= 4 && user.password.length >= 4) {
           
